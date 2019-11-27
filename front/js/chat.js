@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     $("#chatroom").scrollTop($("#chatroom")[0].scrollHeight);
-    var socket = io.connect('http://localhost:3000');
+    var socket = io();
     let power = false;
     $("#message-send").click(function(){
         socket.emit("new-message", {message : $("#message-input").val()})
