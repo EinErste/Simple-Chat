@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" const="text/html;charset=UTF-8" />
+    <link href="http://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="styles/index.css" >
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <title>Chat</title>
+</head>
+
+<body>
+    <section id="content-container">
+        <header>
+            <h1>Chat</h1>
+        </header>
+
+        <section>
+            <div id="change-username">
+                <input id="username" type="text">
+                <input id="password" type="text">
+                <button id="login" type="button">Login</button>
+            </div>
+        </section>
+
+        <section id="chatroom">
+<!--            <div class="massage">-->
+<!--                <div class="massage-info">-->
+<!--                    <div  class="author">Danon</div>-->
+<!--                    <div class="time">15:15:15</div>-->
+<!--                </div>-->
+<!--                <div class="text">awdawdawdawdawdawd</div>-->
+<!--            </div>-->
+            <div id="feedback"></div>
+        </section>
+        <section id="input-zone">
+            <textarea id="message-input" type="text"></textarea>
+            <button id="message-send" type="button">Send</button>
+        </section>
+    </section>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+</html>

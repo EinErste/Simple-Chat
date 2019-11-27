@@ -1,0 +1,17 @@
+{
+  "name": "simple-chat",
+  "version": "1.0.0",
+  "description": "Simple chat on socket.io",
+  "main": "back/app.js",
+  "author": "Shcherbyna Serhii",
+  "license": "ISC",
+  "scripts": {
+    "start" : "nodemon app"
+  },
+  "dependencies": {
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.1",
+    "socket.io": "^2.3.0"
+  }
+}
