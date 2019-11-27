@@ -5,6 +5,7 @@ $(document).ready(function(){
     let power = false;
     $("#message-send").click(function(){
         socket.emit("new-message", {message : $("#message-input").val()})
+        $("#message-input").val('');
     });
 
     socket.on("alert",(data)=>{
