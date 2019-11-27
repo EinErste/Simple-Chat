@@ -5,6 +5,7 @@ $(document).ready(function(){
     let power = false;
     $("#message-send").click(function(){
         socket.emit("new-message", {message : $("#message-input").val()})
+        $("#feedback").html("");
         $("#message-input").val("");
     });
 
@@ -13,8 +14,6 @@ $(document).ready(function(){
     });
 
     socket.on("new-message", (data) => {
-        // $("#feedback").html('');
-        // $("#message-input").val('');
         renderMessage(data);
         $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
     });
