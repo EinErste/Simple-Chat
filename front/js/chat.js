@@ -5,7 +5,7 @@ $(document).ready(function(){
     let power = false;
     $("#message-send").click(function(){
         socket.emit("new-message", {message : $("#message-input").val()})
-        $("#feedback").html("");
+        //$("#feedback").html("");
         $("#message-input").val("");
     });
 
@@ -66,13 +66,13 @@ $(document).ready(function(){
         socket.emit("login", {username : $("#username").val(),password: $("#password").val()})
     });
 
-    $(document).keypress(function(e){
-        if (e.which == 13){
-            if($("#message-input").val()!=""){
-                $("#message-send").click();
-            }
-        }
-    });
+    // $(document).keypress(function(e){
+    //     if (e.which == 13){
+    //         if($("#message-input").val()!=""){
+    //             $("#message-send").click();
+    //         }
+    //     }
+    // });
 
     $(document).on("click",".message-delete",function(e){
         const messageDiv =  $(this).parent().parent();
