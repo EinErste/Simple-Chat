@@ -12,8 +12,8 @@ $(document).ready(function(){
     });
 
     socket.on("new-message", (data) => {
-        $("#feedback").html('');
-        $("#message-input").val('');
+        // $("#feedback").html('');
+        // $("#message-input").val('');
         renderMessage(data);
         $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
     });
