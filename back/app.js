@@ -1,4 +1,5 @@
 const express = require("express");
+const port = process.env.PORT || 3000;
 const app = express();
 const messages = new Array();
 const users = [{username: "SYSTEM",password:"123"},{username: "Moderator",password:"123"},
@@ -11,7 +12,7 @@ app.use(express.static("front"));
 app.get("/",(req,res)=>{
    res.render("../front/index");
 });
-server = app.listen(3000);
+server = app.listen(port);
 const io = require("socket.io")(server);
 
 io.on('connection', (socket) => {
