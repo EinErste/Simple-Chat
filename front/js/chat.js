@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+    const urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     $("#chatroom").scrollTop($("#chatroom")[0].scrollHeight);
     let color;
     var socket = io();
@@ -52,7 +52,7 @@ $(document).ready(function(){
             "                    <div class=\"time\">"+messageObj.time+"</div>\n" +
             "                    <button class=\"message-delete\">x</button>\n" +
             "                </div>\n" +
-            "                <div class=\"text\">"+messageObj.message+"</div>\n" +
+            "                <div class=\"text\">"+linkify(messageObj.message)+"</div>\n" +
             "            </div>");
         const user_left = messageObj.message.substring(messageObj.message.length-9,messageObj.message.length-5);
         if(messageObj.username=="SYSTEM"){
@@ -84,6 +84,12 @@ $(document).ready(function(){
 
     function insert_br(text) {
         return text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    }
+
+    function linkify(text) {
+        return text.replace(urlRegex, function(url) {
+            return '<a href="' + url + '">' + url + '</a>';
+        });
     }
 
     $(".message-input").keypress(function(event) {
