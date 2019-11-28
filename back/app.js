@@ -67,6 +67,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("new-message", (data) => {
+        if(data.message.length<1) return;
         if(messages.length>1000) messages.shift();
         const messageObject = {message : data.message, username : socket.username, time : getTime(), id: counter++};
         messages.push(messageObject);

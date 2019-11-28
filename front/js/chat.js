@@ -5,7 +5,7 @@ $(document).ready(function(){
     var socket = io();
     let power = false;
     $(".message-send").click(function(){
-        socket.emit("new-message", {message : $(".message-input").val()})
+        socket.emit("new-message", {message : insert_br($(".message-input").val())})
         $(".message-input").val("");
     });
 
@@ -73,18 +73,22 @@ $(document).ready(function(){
         socket.emit("login", {username : $(".username").val(),password: $(".password").val()})
     });
 
-    // $(document).keypress(function(e){
-    //     if (e.which == 13){
-    //         if($("#message-input").val()!=""){
-    //             $("#message-send").click();
-    //         }
-    //     }
-    // });
-
     $(document).on("click",".message-delete",function(e){
         const messageDiv =  $(this).parent().parent();
         const messageIdString = messageDiv.attr("id");
         const messageId = messageIdString.substring(1,messageIdString.length);
         socket.emit("delete-message-request",messageId);
     });
+
+    function insert_br(text) {
+        return text.replace(/(?:\r\n|\r|\n)/g, '<br>');;
+    }
+
+    $(".message-input").keypress(function(event) {
+        if (event.keyCode == 13 && !event.shiftKey) {
+            $(".message-send").click();
+            return false;
+        }
+    });
+
 });
