@@ -2,10 +2,10 @@ const express = require("express");
 const port = process.env.PORT || 3000;
 const app = express();
 const messages = new Array();
-const users = [{username: "SYSTEM",password:"123"},{username: "Moderator",password:"123"},
-    {username: "Admin",password:"123"}];
-const power = [{username: "SYSTEM",password:"123"},{username: "Moderator",password:"123"},
-    {username: "Admin",password:"123"}];
+const users = [{username: "SYSTEM",password:"kB7sUQNygpdpU8bE"},{username: "Moderator",password:"kB7sUQNygpdpU8bE"},
+    {username: "Admin",password:"kB7sUQNygpdpU8bE"}];
+const power = [{username: "SYSTEM",password:"kB7sUQNygpdpU8bE"},{username: "Moderator",password:"kB7sUQNygpdpU8bE"},
+    {username: "Admin",password:"kB7sUQNygpdpU8bE"}];
 let online = 0;
 let counter = 0;
 app.set("view engine","ejs");
