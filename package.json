@@ -6,12 +6,13 @@
   "author": "Shcherbyna Serhii",
   "license": "ISC",
   "scripts": {
-    "start" : "nodemon app.js"
+    "start": "nodemon app.js"
   },
   "dependencies": {
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "nodemon": "^2.0.1",
+    "sanitize-html": "^1.20.1",
     "socket.io": "^2.3.0"
   }
 }

@@ -1,11 +1,19 @@
 const express = require("express");
+const sanitizeHtml = require('sanitize-html');
+const sanitizeSettings = {
+    allowedTags: ["br"],
+};
 const port = process.env.PORT || 3000;
 const app = express();
 const messages = new Array();
-const users = [{username: "SYSTEM",password:"kB7sUQNygpdpU8bE"},{username: "Moderator",password:"kB7sUQNygpdpU8bE"},
-    {username: "Admin",password:"kB7sUQNygpdpU8bE"}];
-const power = [{username: "SYSTEM",password:"kB7sUQNygpdpU8bE"},{username: "Moderator",password:"kB7sUQNygpdpU8bE"},
-    {username: "Admin",password:"kB7sUQNygpdpU8bE"}];
+const users = [];
+users.push({username: "SYSTEM",password:"kB7sUQNygpdpU8bE"});
+users.push({username: "System",password:"kB7sUQNygpdpU8bE"});
+users.push({username: "MODERATOR",password:"kB7sUQNygpdpU8bE"});
+users.push({username: "Moderator",password:"kB7sUQNygpdpU8bE"});
+users.push({username: "ADMIN",password:"kB7sUQNygpdpU8bE"});
+users.push({username: "Admin",password:"kB7sUQNygpdpU8bE"});
+const power = users.slice();
 let online = 0;
 let counter = 0;
 app.set("view engine","ejs");
@@ -27,6 +35,19 @@ io.on('connection', (socket) => {
     });
 
     socket.on("login", (user) => {
+        if(!isValidUser(user)){
+            socket.emit("alert","Password or login length cannot " +
+                "be <6 or >30 and contain these symbols &=`~+,<>.\"");
+            return;
+        }
+        user.username = sanitizeHtml(user.username,{
+            allowedTags: [],
+            allowedAttributes: {}
+        });
+        user.password = sanitizeHtml(user.password,{
+            allowedTags: [],
+            allowedAttributes: {}
+        });
         if(user.username == "Anonymous") {
             socket.emit("alert","Reserved username");
             return;
@@ -51,10 +72,6 @@ io.on('connection', (socket) => {
                 return;
             }
         } else {
-            if(!isValidUser(user)){
-                socket.emit("alert","Password or login cannot contain space or length be <1 or >20");
-                return;
-            }
             if(socket.username!="Anonymous"){
                 sendSystemMessage(socket.username +" left chat");
             }
@@ -67,9 +84,10 @@ io.on('connection', (socket) => {
     });
 
     socket.on("new-message", (data) => {
-        if(data.message.length<1) return;
+        const message = sanitizeHtml(data.message,sanitizeSettings);
+        if(message.length<1) return;
         if(messages.length>1000) messages.shift();
-        const messageObject = {message : data.message, username : socket.username, time : getTime(), id: counter++};
+        const messageObject = {message : message, username : socket.username, time : getTime(), id: counter++};
         messages.push(messageObject);
         io.sockets.emit("new-message", messageObject);
     });
@@ -81,7 +99,8 @@ io.on('connection', (socket) => {
         }
         removeMessageById(data);
         io.sockets.emit("delete-message-confirmed", data);
-    })
+    });
+
     function sendSystemMessage(string) {
         const messageObject = {message : string, username : "SYSTEM", time : getTime(), id: counter++};
         messages.push(messageObject);
@@ -119,11 +138,14 @@ function checkPassword(user) {
 }
 
 function isValidUser(user) {
-    if(user.username.includes(" ")||user.password.includes(" ")) return false;
-    // if(user.username==""||user.password=="") return false;
-    if(user.username.length>20 ||user.username.length<1||
-        user.password.length>20 ||user.password.length<1)
+    if(user.username.length>30 ||user.username.length<6||
+        user.password.length>30 ||user.password.length<6)
         return false;
+    const forbidden = Array.from("\"&=`~+,<>.\"");
+    for (let i = 0; i < forbidden.length; i++) {
+        if(user.username.includes(forbidden[i])||user.username.includes(forbidden[i]))
+            return false;
+    }
     return true;
 }
 function checkLogged(user) {
