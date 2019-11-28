@@ -34,6 +34,7 @@ header{
 
 }
 #chatroom{
+    /*border: 3px solid black;*/
     flex: 1;
     padding: 10px;
     padding-left: 0px;
@@ -70,4 +71,23 @@ header{
     height: 50px;
     width: 100%;
     resize: none;
+}
+
+@media only screen and (max-width: 767px){
+    #content-container{
+        width: 90vw;
+    }
+    #title-info{
+        flex-direction: column;
+    }
+
+    #login-form{
+        align-self: center;
+        width: 50%;
+        flex-direction: column;
+    }
+
+    .login{
+        margin-top: 10px;
+    }
 }

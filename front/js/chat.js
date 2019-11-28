@@ -18,7 +18,7 @@ $(document).ready(function(){
         $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
     });
     socket.on("online-counter",counter=>{
-        $(".online-users").text("Online users: "+counter);
+        $(".online-users").text("Users online: "+counter);
     });
     socket.on("connection",(data)=>{
         for (let i = 0; i < data.length; i++) {
