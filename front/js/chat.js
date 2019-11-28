@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
     $("#chatroom").scrollTop($("#chatroom")[0].scrollHeight);
+    let color;
     var socket = io();
     let power = false;
     $(".message-send").click(function(){
@@ -16,7 +17,9 @@ $(document).ready(function(){
         renderMessage(data);
         $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
     });
-
+    socket.on("online-counter",counter=>{
+        $(".online-users").text("Online users: "+counter);
+    });
     socket.on("connection",(data)=>{
         for (let i = 0; i < data.length; i++) {
             renderMessage(data[i]);
@@ -34,6 +37,8 @@ $(document).ready(function(){
     });
 
     socket.on("change-username",name=>{
+        color = "#" + ("000000" + Math.random().toString(16).slice(2, 8).toUpperCase()).slice(-6);
+        $(".author").css("color",color);
         $("#user").text("User: "+name);
     });
 
@@ -44,7 +49,7 @@ $(document).ready(function(){
     function renderMessage(messageObj){
         $("#chatroom").append("<div class=\"message\" id=\"m"+messageObj.id+"\">\n" +
             "                <div class=\"message-info\">\n" +
-            "                    <div  class=\"author\">"+messageObj.username+"</div>\n" +
+            "                    <div class=\"author\">"+messageObj.username+"</div>\n" +
             "                    <div class=\"time\">"+messageObj.time+"</div>\n" +
             "                    <button class=\"message-delete\">x</button>\n" +
             "                </div>\n" +

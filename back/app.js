@@ -6,6 +6,7 @@ const users = [{username: "SYSTEM",password:"123"},{username: "Moderator",passwo
     {username: "Admin",password:"123"}];
 const power = [{username: "SYSTEM",password:"123"},{username: "Moderator",password:"123"},
     {username: "Admin",password:"123"}];
+let online = 0;
 let counter = 0;
 app.set("view engine","ejs");
 app.use(express.static("front"));
@@ -17,10 +18,10 @@ const io = require("socket.io")(server);
 
 io.on('connection', (socket) => {
     socket.emit("connection",messages);
-
     socket.username = "Anonymous";
-
+    io.sockets.emit("online-counter",++online);
     socket.on("disconnect", function() {
+        io.sockets.emit("online-counter",--online);
         if(socket.username == "Anonymous") return;
         sendSystemMessage(socket.username +" left chat");
     });

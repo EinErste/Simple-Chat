@@ -19,9 +19,14 @@ header{
     margin-bottom: 10px;
 }
 
-#user{
+#title-info{
     font-size: 25px;
+    display: flex;
+    justify-content: center;
+}
 
+.online-users{
+    margin-left: 20px;
 }
 #login-form{
     display: flex;
