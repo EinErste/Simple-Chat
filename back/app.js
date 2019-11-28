@@ -138,8 +138,8 @@ function checkPassword(user) {
 }
 
 function isValidUser(user) {
-    if(user.username.length>30 ||user.username.length<6||
-        user.password.length>30 ||user.password.length<6)
+    if(user.username.length>30 ||user.username.length<3||
+        user.password.length>30 ||user.password.length<3)
         return false;
     const forbidden = Array.from("\"&=`~+,<>.\"");
     for (let i = 0; i < forbidden.length; i++) {
