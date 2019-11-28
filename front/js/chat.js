@@ -38,12 +38,11 @@ $(document).ready(function(){
 
     socket.on("change-username",name=>{
         color = "#" + ("000000" + Math.random().toString(16).slice(2, 8).toUpperCase()).slice(-6);
-        $(".author").css("color",color);
+        //$(".author").css("color",color);
         $("#user").text("User: "+name);
     });
 
     socket.on("delete-message-confirmed", (id)=>{
-        console.log(id);
         $("#m"+id).remove();
     });
     function renderMessage(messageObj){
