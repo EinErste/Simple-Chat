@@ -23,12 +23,13 @@ header{
 #title-info{
     font-size: 25px;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
 }
-
+.username{
+    margin-right: 40px;
+}
 .online-users{
     color: green;
-    margin-left: 20px;
 }
 #login-form{
     display: flex;
@@ -36,13 +37,18 @@ header{
 
 }
 #chatroom{
-    /*border: 3px solid black;*/
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
     flex: 1;
-    padding: 10px;
-    padding-left: 0px;
+    padding: 0px;
+    padding-right: 5px;
     margin-top:10px;
     margin-bottom:10px;
     overflow: auto;
+}
+
+.message:last-child{
+    margin-bottom: 0px;
 }
 ::-webkit-scrollbar {
     width: 8px;
@@ -98,6 +104,9 @@ header{
         flex-direction: column;
     }
 
+    .online-users{
+        margin-left: initial;
+    }
     #chatroom{
         /*overflow: initial;*/
     }
