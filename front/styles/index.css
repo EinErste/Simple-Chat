@@ -48,11 +48,6 @@ header{
     width: 8px;
 }
 
-/*::-webkit-scrollbar-track {*/
-/*    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
-/*    border-radius: 10px;*/
-/*}*/
-
 ::-webkit-scrollbar-thumb {
     border-radius: 15px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
@@ -97,11 +92,15 @@ header{
 @media only screen and (max-width: 767px){
     #content-container{
         width: 90vw;
+        height: initial;
     }
     #title-info{
         flex-direction: column;
     }
 
+    #chatroom{
+        /*overflow: initial;*/
+    }
     #login-form{
         align-self: center;
         width: 50%;
