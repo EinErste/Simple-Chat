@@ -36,7 +36,6 @@ io.on('connection', (socket) => {
         }
         if(isRegistered(user)){
             if(checkPassword(user)){
-                console.log(user);
                 if(socket.username!="Anonymous") {
                     sendSystemMessage(socket.username +" left chat");
                 }
@@ -52,7 +51,7 @@ io.on('connection', (socket) => {
             }
         } else {
             if(!isValidUser(user)){
-                socket.emit("alert","Password or login cannot contain space or be empty string");
+                socket.emit("alert","Password or login cannot contain space or length be <1 or >20");
                 return;
             }
             if(socket.username!="Anonymous"){
@@ -62,6 +61,7 @@ io.on('connection', (socket) => {
             users.push(user);
             socket.username = user.username;
         }
+        socket.emit("change-username",socket.username);
         sendSystemMessage(socket.username +" entered chat");
     });
 
@@ -118,7 +118,10 @@ function checkPassword(user) {
 
 function isValidUser(user) {
     if(user.username.includes(" ")||user.password.includes(" ")) return false;
-    if(user.username==""||user.password=="") return false;
+    // if(user.username==""||user.password=="") return false;
+    if(user.username.length>20 ||user.username.length<1||
+        user.password.length>20 ||user.password.length<1)
+        return false;
     return true;
 }
 function checkLogged(user) {

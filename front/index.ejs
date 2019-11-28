@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" const="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="styles/index.css" >
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
@@ -11,30 +12,22 @@
 <body>
     <section id="content-container">
         <header>
-            <h1>Chat</h1>
+            <div class="title">Chat</div>
+            <div id="user">User: Anonymous</div>
         </header>
-
         <section>
-            <div id="change-username">
-                <input id="username" type="text">
-                <input id="password" type="text">
-                <button id="login" type="button">Login</button>
+            <div id="login-form">
+                <label>Username: </label><input class="username" type="text">
+                <label>Password: </label><input class="password" type="password">
+                <button class="login" type="button">Login</button>
             </div>
         </section>
 
         <section id="chatroom">
-<!--            <div class="massage">-->
-<!--                <div class="massage-info">-->
-<!--                    <div  class="author">Danon</div>-->
-<!--                    <div class="time">15:15:15</div>-->
-<!--                </div>-->
-<!--                <div class="text">awdawdawdawdawdawd</div>-->
-<!--            </div>-->
-            <div id="feedback"></div>
         </section>
         <section id="input-zone">
-            <textarea id="message-input" type="text"></textarea>
-            <button id="message-send" type="button">Send</button>
+            <textarea class="message-input" type="text"></textarea>
+            <button class="message-send" type="button">Send</button>
         </section>
     </section>
 

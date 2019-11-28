@@ -3,10 +3,9 @@ $(document).ready(function(){
     $("#chatroom").scrollTop($("#chatroom")[0].scrollHeight);
     var socket = io();
     let power = false;
-    $("#message-send").click(function(){
-        socket.emit("new-message", {message : $("#message-input").val()})
-        //$("#feedback").html("");
-        $("#message-input").val("");
+    $(".message-send").click(function(){
+        socket.emit("new-message", {message : $(".message-input").val()})
+        $(".message-input").val("");
     });
 
     socket.on("alert",(data)=>{
@@ -32,6 +31,10 @@ $(document).ready(function(){
         } else {
             $(".message-delete").css("display","none");
         }
+    });
+
+    socket.on("change-username",name=>{
+        $("#user").text("User: "+name);
     });
 
     socket.on("delete-message-confirmed", (id)=>{
@@ -62,8 +65,8 @@ $(document).ready(function(){
         }
     }
 
-    $("#login").click(function(){
-        socket.emit("login", {username : $("#username").val(),password: $("#password").val()})
+    $(".login").click(function(){
+        socket.emit("login", {username : $(".username").val(),password: $(".password").val()})
     });
 
     // $(document).keypress(function(e){

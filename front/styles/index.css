@@ -14,9 +14,20 @@ body{
 }
 
 header{
+    font-size: 30px;
     text-align: center;
+    margin-bottom: 10px;
 }
 
+#user{
+    font-size: 25px;
+
+}
+#login-form{
+    display: flex;
+    justify-content: center;
+
+}
 #chatroom{
     flex: 1;
     padding: 10px;
@@ -50,8 +61,8 @@ header{
     margin-bottom: 20px;
 }
 
-#message-input{
-    height: 100px;
+.message-input{
+    height: 50px;
     width: 100%;
     resize: none;
 }
