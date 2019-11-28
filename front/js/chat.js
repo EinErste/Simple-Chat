@@ -52,8 +52,9 @@ $(document).ready(function(){
             "                    <div class=\"time\">"+messageObj.time+"</div>\n" +
             "                    <button class=\"message-delete\">x</button>\n" +
             "                </div>\n" +
-            "                <div class=\"text\">"+messageObj.message+"</div>\n" +
+            "                <div class=\"text\"></div>\n" +
             "            </div>");
+        $("#m"+messageObj.id+" .text").text(messageObj.message);
         const user_left = messageObj.message.substring(messageObj.message.length-9,messageObj.message.length-5);
         if(messageObj.username=="SYSTEM"){
             if(user_left=="left"){
