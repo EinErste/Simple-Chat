@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    console.log(123123);
     const urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     $("#chatroom").scrollTop($("#chatroom")[0].scrollHeight);
     let color;

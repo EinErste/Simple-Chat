@@ -3,13 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="76e6c34f-820b-471f-b15b-8122e49fb726" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/docs/views/index.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/js/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/chat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/styles/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/public/styles/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemon/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemon/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/chat.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -73,7 +67,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1574857848709</updated>
-      <workItem from="1574857853481" duration="57315000" />
+      <workItem from="1574857853481" duration="57623000" />
     </task>
     <servers />
   </component>
