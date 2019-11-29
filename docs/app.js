@@ -1,5 +1,5 @@
 const path = require('path');
-// // console.log(path);
+const mysql = require('mysql');
 const express = require("express");
 const sanitizeHtml = require('sanitize-html');
 const sanitizeSettings = {
@@ -8,14 +8,10 @@ const sanitizeSettings = {
 const port = process.env.PORT || 3000;
 const app = express();
 const messages = new Array();
-const users = [];
-users.push({username: "SYSTEM",password:"kB7sUQNygpdpU8bE"});
-users.push({username: "System",password:"kB7sUQNygpdpU8bE"});
-users.push({username: "MODERATOR",password:"kB7sUQNygpdpU8bE"});
-users.push({username: "Moderator",password:"kB7sUQNygpdpU8bE"});
-users.push({username: "ADMIN",password:"kB7sUQNygpdpU8bE"});
-users.push({username: "Admin",password:"kB7sUQNygpdpU8bE"});
-const power = users.slice();
+const power = [];
+power.push({username: "SYSTEM",password:"kB7sUQNygpdpU8bE"});
+power.push({username: "Moderator",password:"kB7sUQNygpdpU8bE"});
+power.push({username: "Admin",password:"kB7sUQNygpdpU8bE"});
 let online = 0;
 let counter = 0;
 app.set('views', path.join(__dirname,"/views"));
@@ -28,6 +24,23 @@ app.get("/",(req,res)=>{
 server = app.listen(port);
 const io = require("socket.io")(server);
 
+const mysql_connection = mysql.createConnection({
+    host     : 'eu-cdbr-west-02.cleardb.net',
+    user     : 'b7737bc41e5c98',
+    password : '0ef8f3ce',
+    database : 'heroku_e66901051ec4116'
+});
+
+
+mysql_connection.connect(function(err) {
+    if (err) {
+        console.log("Not connected");
+    } else {
+        console.log("Connected!");
+    }
+});
+
+
 io.on('connection', (socket) => {
     socket.emit("connection",messages);
     socket.username = "Anonymous";
@@ -38,7 +51,7 @@ io.on('connection', (socket) => {
         sendSystemMessage(socket.username +" left chat");
     });
 
-    socket.on("login", (user) => {
+    socket.on("login", async (user) => {
         if(!isValidUser(user)){
             socket.emit("alert","Password or login length cannot " +
                 "be <6 or >30 and contain these symbols &=`~+,<>.\"");
@@ -52,16 +65,14 @@ io.on('connection', (socket) => {
             allowedTags: [],
             allowedAttributes: {}
         });
-        if(user.username == "Anonymous") {
-            socket.emit("alert","Reserved username");
-            return;
-        }
         if(checkLogged(user)){
             socket.emit("alert","User already logged");
             return;
         }
-        if(isRegistered(user)){
-            if(checkPassword(user)){
+
+        const passwordSQL = await getPassword(user);
+        if(passwordSQL!=undefined){
+            if(passwordSQL.pass==user.password){
                 if(socket.username!="Anonymous") {
                     sendSystemMessage(socket.username +" left chat");
                 }
@@ -80,7 +91,7 @@ io.on('connection', (socket) => {
                 sendSystemMessage(socket.username +" left chat");
             }
             socket.emit("power",false);
-            users.push(user);
+            await addUsersSQL(user);
             socket.username = user.username;
         }
         socket.emit("change-username",socket.username);
@@ -90,7 +101,8 @@ io.on('connection', (socket) => {
     socket.on("new-message", (data) => {
         const message = sanitizeHtml(data.message,sanitizeSettings);
         if(message.length<1) return;
-        if(messages.length>1000) messages.shift();
+        if(message.length>280) return;
+        // if(messages.length>1000) messages.shift();
         const messageObject = {message : message, username : socket.username, time : getTime(), id: counter++};
         messages.push(messageObject);
         io.sockets.emit("new-message", messageObject);
@@ -101,7 +113,7 @@ io.on('connection', (socket) => {
             socket.emit("alert","Unauthorized access");
             return;
         }
-        removeMessageById(data);
+        // removeMessageById(data);
         io.sockets.emit("delete-message-confirmed", data);
     });
 
@@ -127,23 +139,35 @@ function getTime() {
     return time[0]+":"+time[1]+":"+time[2]+" "+ time[3]+"."+ time[4]+"."+ time[5];
 }
 
-function isRegistered(user) {
-    for (let i = 0; i < users.length; i++) {
-        if(user.username==users[i].username) return true;
-    }
-    return false;
+async function getPassword(user){
+    return new Promise(resolve => {
+        let sql = "SELECT pass FROM Users WHERE username = ?";
+        let inserts = [user.username];
+        sql = mysql.format(sql, inserts);
+        mysql_connection.query(sql, function(error, result, field){
+            resolve(result[0]);
+        });
+    });
 }
 
-function checkPassword(user) {
-    for (let i = 0; i < users.length; i++) {
-        if(user.password==users[i].password) return true;
-    }
-    return false;
+async function addUsersSQL(user) {
+    return new Promise(resolve => {
+        let sql = "INSERT INTO Users VALUES(?,?)";
+        let inserts = [user.username,user.password];
+        sql = mysql.format(sql, inserts);
+        mysql_connection.query(sql, function(error, result, field){
+            resolve(result);
+        });
+    });
+}
+
+function addMessageSQL() {
+    
 }
 
 function isValidUser(user) {
-    if(user.username.length>15 ||user.username.length<3||
-        user.password.length>15 ||user.password.length<3)
+    if(user.username.length>20 ||user.username.length<3||
+        user.password.length>20 ||user.password.length<3)
         return false;
     const forbidden = Array.from("\"&=`~+,<>.\"");
     for (let i = 0; i < forbidden.length; i++) {

@@ -108,11 +108,13 @@ header div{
 @media only screen and (max-width: 1076px){
     #content-container{
         width: 90vw;
+        min-height: 90vh;
     }
 }
 @media only screen and (max-width: 767px){
     #content-container{
         height: initial;
+        min-height: 90vh;
         flex-direction: column;
     }
 
