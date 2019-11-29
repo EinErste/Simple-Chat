@@ -88,7 +88,7 @@ $(document).ready(function(){
 
     function linkify(text) {
         return text.replace(urlRegex, function(url) {
-            return '<a href="' + url + '">' + url + '</a>';
+            return '<a target="_blank" href="' + url + '">' + url + '</a>';
         });
     }
 
