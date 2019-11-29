@@ -15,12 +15,10 @@ power.push({username: "Admin",password:"kB7sUQNygpdpU8bE"});
 let online = 0;
 let counter = 0;
 app.set('views', path.join(__dirname,"/views"));
-app.use(express.static(path.join(__dirname, './public')));
 app.set("view engine","ejs");
+app.use(express.static(path.join(__dirname, './public')));
 app.use(express.static("front"));
-app.get("/",(req,res)=>{
-   res.render("index");
-});
+app.get("/",(req,res)=>{res.render("index");});
 server = app.listen(port);
 const io = require("socket.io")(server);
 
@@ -31,14 +29,21 @@ const mysql_connection = mysql.createConnection({
     database : 'heroku_e66901051ec4116'
 });
 
-
 mysql_connection.connect(function(err) {
     if (err) {
-        console.log("Not connected");
+        console.log("SQL not connected");
     } else {
         console.log("Connected!");
     }
 });
+
+setInterval(() => {
+    mysql_connection.query('SELECT 1', (err, rows) => {
+        if (err) throw err;
+    });
+}, 50000);
+
+
 
 
 io.on('connection', (socket) => {
@@ -105,6 +110,7 @@ io.on('connection', (socket) => {
         // if(messages.length>1000) messages.shift();
         const messageObject = {message : message, username : socket.username, time : getTime(), id: counter++};
         messages.push(messageObject);
+        addMessageSQL(messageObject);
         io.sockets.emit("new-message", messageObject);
     });
 
@@ -161,8 +167,11 @@ async function addUsersSQL(user) {
     });
 }
 
-function addMessageSQL() {
-    
+function addMessageSQL(messageObj) {
+    let sql = "INSERT INTO Messages VALUES(?,?,?,?)";
+    let inserts = [messageObj.id,messageObj.message,messageObj.username,messageObj.time];
+    sql = mysql.format(sql, inserts);
+    mysql_connection.query(sql);
 }
 
 function isValidUser(user) {
