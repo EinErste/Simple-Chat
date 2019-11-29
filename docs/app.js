@@ -22,6 +22,7 @@ app.get("/",(req,res)=>{res.render("index");});
 server = app.listen(port);
 const io = require("socket.io")(server);
 
+//Connect to MySQL
 const mysql_connection = mysql.createConnection({
     host     : 'eu-cdbr-west-02.cleardb.net',
     user     : 'b7737bc41e5c98',
@@ -33,33 +34,44 @@ mysql_connection.connect(function(err) {
     if (err) {
         console.log("SQL not connected");
     } else {
-        console.log("Connected!");
+        console.log("SQL connected!");
     }
 });
 
+//Prevent SQL timeout idle
 setInterval(() => {
-    mysql_connection.query('SELECT 1', (err, rows) => {
-        if (err) throw err;
+    mysql_connection.query('SELECT 1', (error) => {
+        console.log("ping");
+        if (error) throw error;
     });
 }, 50000);
 
+//Last message id
+getCounter().then(data=>{
+   if(data!=undefined) counter = data.id;
+});
 
-
-
+//Socket io
 io.on('connection', (socket) => {
-    socket.emit("connection",messages);
+    //Init new socket with info
+    getMessages().then(data=>{
+        socket.emit("connection",data);
+    });
     socket.username = "Anonymous";
+    //Update all socket counters
     io.sockets.emit("online-counter",++online);
+    //Update all socket counters and send leave message
     socket.on("disconnect", function() {
         io.sockets.emit("online-counter",--online);
         if(socket.username == "Anonymous") return;
         sendSystemMessage(socket.username +" left chat");
     });
 
+    //Login logic
     socket.on("login", async (user) => {
         if(!isValidUser(user)){
             socket.emit("alert","Password or login length cannot " +
-                "be <6 or >30 and contain these symbols &=`~+,<>.\"");
+                "be <3 or >30 and contain these symbols &=`~+,<>.\"");
             return;
         }
         user.username = sanitizeHtml(user.username,{
@@ -76,6 +88,7 @@ io.on('connection', (socket) => {
         }
 
         const passwordSQL = await getPassword(user);
+        //User is registered
         if(passwordSQL!=undefined){
             if(passwordSQL.pass==user.password){
                 if(socket.username!="Anonymous") {
@@ -91,6 +104,7 @@ io.on('connection', (socket) => {
                 socket.emit("alert","Wrong login or password");
                 return;
             }
+        //Register new user
         } else {
             if(socket.username!="Anonymous"){
                 sendSystemMessage(socket.username +" left chat");
@@ -103,34 +117,43 @@ io.on('connection', (socket) => {
         sendSystemMessage(socket.username +" entered chat");
     });
 
+    //Get message from single socket, add to SQL, broadcast to others.
     socket.on("new-message", (data) => {
         const message = sanitizeHtml(data.message,sanitizeSettings);
         if(message.length<1) return;
-        if(message.length>280) return;
-        // if(messages.length>1000) messages.shift();
+        if(message.length>3000) return;
         const messageObject = {message : message, username : socket.username, time : getTime(), id: counter++};
-        messages.push(messageObject);
         addMessageSQL(messageObject);
         io.sockets.emit("new-message", messageObject);
     });
 
+    //Delete message from SQL and sockets
     socket.on("delete-message-request",(data)=>{
         if(!checkPower(socket.username)){
             socket.emit("alert","Unauthorized access");
             return;
         }
-        // removeMessageById(data);
+        removeMessageById(data);
         io.sockets.emit("delete-message-confirmed", data);
     });
 
+    //User SYSTEM sends message
     function sendSystemMessage(string) {
         const messageObject = {message : string, username : "SYSTEM", time : getTime(), id: counter++};
-        messages.push(messageObject);
+        addMessageSQL(messageObject);
         io.sockets.emit("new-message", messageObject);
     }
 
 });
 
+async function getMessages() {
+    return new Promise(resolve => {
+        let sql = "SELECT * FROM Messages";
+        mysql_connection.query(sql, function(error, result, field){
+            resolve(result);
+        });
+    });
+}
 function getTime() {
     var now = new Date();
     var time = [now.getHours(), now.getMinutes(), now.getSeconds(),
@@ -145,7 +168,7 @@ function getTime() {
     return time[0]+":"+time[1]+":"+time[2]+" "+ time[3]+"."+ time[4]+"."+ time[5];
 }
 
-async function getPassword(user){
+function getPassword(user){
     return new Promise(resolve => {
         let sql = "SELECT pass FROM Users WHERE username = ?";
         let inserts = [user.username];
@@ -166,6 +189,17 @@ async function addUsersSQL(user) {
         });
     });
 }
+
+async function getCounter() {
+    return new Promise(resolve => {
+        let sql = "SELECT id FROM Messages ORDER BY ID DESC LIMIT 1\n";
+        mysql_connection.query(sql, function(error, result, field){
+            resolve(result[0]);
+        });
+    });
+}
+
+
 
 function addMessageSQL(messageObj) {
     let sql = "INSERT INTO Messages VALUES(?,?,?,?)";
@@ -205,10 +239,8 @@ function checkPower(username) {
 }
 
 function removeMessageById(id) {
-    for (let i = 0; i < messages.length; i++) {
-        if(id==messages[i].id) {
-            messages.splice(i,1);
-            break;
-        }
-    }
+    let sql = "DELETE FROM Messages WHERE id = ?;";
+    let inserts = [id];
+    sql = mysql.format(sql, inserts);
+    mysql_connection.query(sql);
 }

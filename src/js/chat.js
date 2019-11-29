@@ -54,8 +54,8 @@ $(document).ready(function(){
             "                </div>\n" +
             "                <div class=\"text\">"+linkify(messageObj.message)+"</div>\n" +
             "            </div>");
-        const user_left = messageObj.message.substring(messageObj.message.length-9,messageObj.message.length-5);
         if(messageObj.username=="SYSTEM"){
+            const user_left = messageObj.message.substring(messageObj.message.length-9,messageObj.message.length-5);
             if(user_left=="left"){
                 $("#m"+messageObj.id).css("background-color","lavender");
             } else {
