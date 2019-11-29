@@ -1,3 +1,5 @@
+const path = require('path');
+// // console.log(path);
 const express = require("express");
 const sanitizeHtml = require('sanitize-html');
 const sanitizeSettings = {
@@ -16,10 +18,12 @@ users.push({username: "Admin",password:"kB7sUQNygpdpU8bE"});
 const power = users.slice();
 let online = 0;
 let counter = 0;
+app.set('views', path.join(__dirname,"/views"));
+app.use(express.static(path.join(__dirname, './public')));
 app.set("view engine","ejs");
 app.use(express.static("front"));
 app.get("/",(req,res)=>{
-   res.render("../front/index");
+   res.render("index");
 });
 server = app.listen(port);
 const io = require("socket.io")(server);
@@ -138,8 +142,8 @@ function checkPassword(user) {
 }
 
 function isValidUser(user) {
-    if(user.username.length>30 ||user.username.length<3||
-        user.password.length>30 ||user.password.length<3)
+    if(user.username.length>15 ||user.username.length<3||
+        user.password.length>15 ||user.password.length<3)
         return false;
     const forbidden = Array.from("\"&=`~+,<>.\"");
     for (let i = 0; i < forbidden.length; i++) {

@@ -2,17 +2,30 @@
   "name": "simple-chat",
   "version": "1.0.0",
   "description": "Simple chat on socket.io",
-  "main": "back/app.js",
+  "main": "docs/app.js",
   "author": "Shcherbyna Serhii",
   "license": "ISC",
   "scripts": {
-    "start": "nodemon app.js"
+    "build": "webpack",
+    "start": "npm-run-all --parallel watch:server watch:build",
+    "watch:build": "webpack --watch",
+    "watch:server": "nodemon \"./docs/app.js\" --watch \"./src/js/chat.js\""
   },
   "dependencies": {
     "ejs": "^3.0.1",
     "express": "^4.17.1",
+    "jquery": "^3.4.1",
     "nodemon": "^2.0.1",
+    "npm-run-all": "^4.1.5",
     "sanitize-html": "^1.20.1",
     "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "webpac": "^1.0.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   }
 }
