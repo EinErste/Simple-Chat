@@ -1,7 +1,7 @@
 $(document).ready(function(){
     const urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    let username = "Anonymous";
     $("#chatroom").scrollTop($("#chatroom")[0].scrollHeight);
-    let color;
     var socket = io();
     let power = false;
     $(".message-send").click(function(){
@@ -15,17 +15,24 @@ $(document).ready(function(){
 
     socket.on("new-message", (data) => {
         renderMessage(data);
+        if(data.message.includes("@everyone")||data.message.includes("@"+username)){
+            let audio = new Audio('../media/sounds/notification.mp3');
+            audio.play();
+        }
         $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
     });
     socket.on("online-counter",counter=>{
         $(".online-users").text("Users online: "+counter);
     });
     socket.on("connection",(data)=>{
+        $(".message").remove();
         for (let i = 0; i < data.length; i++) {
             renderMessage(data[i]);
         }
         $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
     });
+
+
 
     socket.on("power",data=> {
         power = data;
@@ -37,9 +44,13 @@ $(document).ready(function(){
     });
 
     socket.on("change-username",name=>{
-        color = "#" + ("000000" + Math.random().toString(16).slice(2, 8).toUpperCase()).slice(-6);
-        //$(".author").css("color",color);
-        $("#user").text("User: "+name);
+        username = name;
+        const u = "@"+name;
+        const search = ".message .text:contains("+u+")";
+        $(search).html(function(_, html) {
+            return html.split(u).join("<span style=\"color: blue;\">"+u+"</span>");
+        });
+        $("#user").text(""+name+"");
     });
 
     socket.on("delete-message-confirmed", (id)=>{
@@ -52,8 +63,9 @@ $(document).ready(function(){
             "                    <div class=\"time\">"+messageObj.time+"</div>\n" +
             "                    <button class=\"message-delete\">x</button>\n" +
             "                </div>\n" +
-            "                <div class=\"text\">"+linkify(messageObj.message)+"</div>\n" +
+            "                <div class=\"text\">"+tagUser(linkify(messageObj.message))+"</div>\n" +
             "            </div>");
+
         if(messageObj.username=="SYSTEM"){
             const user_left = messageObj.message.substring(messageObj.message.length-9,messageObj.message.length-5);
             if(user_left=="left"){
@@ -62,6 +74,8 @@ $(document).ready(function(){
                 $("#m"+messageObj.id).css("background-color","darkseagreen");
             }
         }
+
+
         if(power){
             $(".message-delete").css("display","block");
         } else {
@@ -90,6 +104,17 @@ $(document).ready(function(){
         return text.replace(urlRegex, function(url) {
             return '<a target="_blank" href="' + url + '">' + url + '</a>';
         });
+    }
+
+    function tagUser(text){
+        let result = text.replace("@everyone",function (replace) {
+            return "<span style=\"color: red;\">"+replace+"</span>";
+        });
+        if(username=="Anonymous") return result;
+        result = result.replace("@"+username,function (replace) {
+            return "<span style=\"color: blue;\">"+replace+"</span>";
+        });
+        return result;
     }
 
     $(".message-input").keypress(function(event) {

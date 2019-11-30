@@ -10,7 +10,7 @@ body{
     align-self: center;
     display: flex;
     height: 100vh;
-    width: 60vw;
+    width: 70vw;
 }
 #chatroom-container{
     flex: 1;
@@ -111,7 +111,7 @@ header div{
         min-height: 90vh;
     }
 }
-@media only screen and (max-width: 767px){
+@media only screen and (max-width: 900px){
     #content-container{
         height: initial;
         min-height: 90vh;

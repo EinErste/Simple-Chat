@@ -5,13 +5,9 @@ const sanitizeHtml = require('sanitize-html');
 const sanitizeSettings = {
     allowedTags: ["br"],
 };
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 const app = express();
-const messages = new Array();
-const power = [];
-power.push({username: "SYSTEM",password:"kB7sUQNygpdpU8bE"});
-power.push({username: "Moderator",password:"kB7sUQNygpdpU8bE"});
-power.push({username: "Admin",password:"kB7sUQNygpdpU8bE"});
+const power =["SYSTEM","Admin","Moderator"];
 let online = 0;
 let counter = 0;
 app.set('views', path.join(__dirname,"/views"));
@@ -48,15 +44,13 @@ setInterval(() => {
 
 //Last message id
 getCounter().then(data=>{
-   if(data!=undefined) counter = data.id;
+   if(data!=undefined) counter = data.id + 1;
 });
 
 //Socket io
 io.on('connection', (socket) => {
     //Init new socket with info
-    getMessages().then(data=>{
-        socket.emit("connection",data);
-    });
+    socketEmitInit();
     socket.username = "Anonymous";
     //Update all socket counters
     io.sockets.emit("online-counter",++online);
@@ -115,6 +109,7 @@ io.on('connection', (socket) => {
         }
         socket.emit("change-username",socket.username);
         sendSystemMessage(socket.username +" entered chat");
+        socketEmitInit();
     });
 
     //Get message from single socket, add to SQL, broadcast to others.
@@ -144,11 +139,18 @@ io.on('connection', (socket) => {
         io.sockets.emit("new-message", messageObject);
     }
 
+    function socketEmitInit() {
+        getMessages().then(data=>{
+            socket.emit("connection",data);
+        });
+    }
+
 });
 
 async function getMessages() {
     return new Promise(resolve => {
-        let sql = "SELECT * FROM Messages";
+            // let sql = "SELECT * FROM Messages ORDER BY ID ASC";
+            let sql = "SELECT * FROM Messages";
         mysql_connection.query(sql, function(error, result, field){
             resolve(result);
         });
@@ -192,7 +194,7 @@ async function addUsersSQL(user) {
 
 async function getCounter() {
     return new Promise(resolve => {
-        let sql = "SELECT id FROM Messages ORDER BY ID DESC LIMIT 1\n";
+        let sql = "SELECT id FROM Messages ORDER BY ID DESC LIMIT 1";
         mysql_connection.query(sql, function(error, result, field){
             resolve(result[0]);
         });
@@ -231,7 +233,7 @@ function checkLogged(user) {
 
 function checkPower(username) {
     for (let i = 0; i < power.length; i++) {
-        if(username==power[i].username) {
+        if(username==power[i]) {
             return true;
         }
     }

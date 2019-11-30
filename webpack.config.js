@@ -1,5 +1,5 @@
 const path = require('path');
-
+const Webpack = require('webpack');
 module.exports = {
     entry: './src/js/chat.js',
     output: {
@@ -21,10 +21,11 @@ module.exports = {
             }
         ],
     },
-    watch: true,
+
+    watch: false,
     watchOptions: {
         aggregateTimeout: 300,
         poll: 1000,
         ignored: /node_modules/
-    },
+    }
 };
