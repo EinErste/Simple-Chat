@@ -21,8 +21,7 @@ $(document).ready(function(){
 
     socket.on("new-message", (data) => {
         renderMessage(data);
-        if(data.message.includes("@everyone")||
-            (data.message.includes("@"+username)&&data.message.includes("@Anonymous"))){
+        if(data.message.includes("@everyone")|| (data.message.includes("@"+username)&&!data.message.includes("@Anonymous"))){
             let audio = new Audio('../media/sounds/notification.mp3');
             audio.play();
         }
