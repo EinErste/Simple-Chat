@@ -4,7 +4,13 @@ $(document).ready(function(){
     $("#chatroom").scrollTop($("#chatroom")[0].scrollHeight);
     var socket = io();
     let power = false;
+    let canSend = true;
     $(".message-send").click(function(){
+        if(!canSend) return;
+        canSend = false;
+        setTimeout(function() {
+            canSend = true;
+        }, 1500);
         socket.emit("new-message", {message : insert_br($(".message-input").val())})
         $(".message-input").val("");
     });
@@ -15,11 +21,16 @@ $(document).ready(function(){
 
     socket.on("new-message", (data) => {
         renderMessage(data);
-        if(data.message.includes("@everyone")||data.message.includes("@"+username)){
+        if(data.message.includes("@everyone")||
+            (data.message.includes("@"+username)&&data.message.includes("@Anonymous"))){
             let audio = new Audio('../media/sounds/notification.mp3');
             audio.play();
         }
         $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
+        if(username=="Anonymous");
+        $(".author").filter(function () {
+            return $(this).text() == username;
+        }).css("color", "darkorange");
     });
     socket.on("online-counter",counter=>{
         $(".online-users").text("Users online: "+counter);
@@ -46,10 +57,17 @@ $(document).ready(function(){
     socket.on("change-username",name=>{
         username = name;
         const u = "@"+name;
-        const search = ".message .text:contains("+u+")";
-        $(search).html(function(_, html) {
-            return html.split(u).join("<span style=\"color: blue;\">"+u+"</span>");
+        //Color this user tags
+        $(".message .text:contains("+u+")").html(function(_, html) {
+            return html.split(u).join("<span style=\"color: darkblue;\">"+u+"</span>");
         });
+        //Set usernames color to default
+        $(".author").css("color","black");
+        //Set this username color to darkorange
+        $(".author").filter(function () {
+            return $(this).text() == username;
+        }).css("color", "darkorange");;
+        $("#user").css("color","darkorange");
         $("#user").text(""+name+"");
     });
 
@@ -59,8 +77,8 @@ $(document).ready(function(){
     function renderMessage(messageObj){
         $("#chatroom").append("<div class=\"message\" id=\"m"+messageObj.id+"\">\n" +
             "                <div class=\"message-info\">\n" +
-            "                    <div class=\"author\">"+messageObj.username+"</div>\n" +
-            "                    <div class=\"time\">"+messageObj.time+"</div>\n" +
+            "                    <div class=\"message-info-inwrapper\"><div class=\"author\">"+messageObj.username+"</div>\n" +
+            "                    <div class=\"time\">"+messageObj.time+"</div></div>\n" +
             "                    <button class=\"message-delete\">x</button>\n" +
             "                </div>\n" +
             "                <div class=\"text\">"+tagUser(linkify(messageObj.message))+"</div>\n" +
@@ -71,7 +89,7 @@ $(document).ready(function(){
             if(user_left=="left"){
                 $("#m"+messageObj.id).css("background-color","lavender");
             } else {
-                $("#m"+messageObj.id).css("background-color","darkseagreen");
+                $("#m"+messageObj.id).css("background-color","lightyellow");
             }
         }
 
@@ -112,7 +130,7 @@ $(document).ready(function(){
         });
         if(username=="Anonymous") return result;
         result = result.replace("@"+username,function (replace) {
-            return "<span style=\"color: blue;\">"+replace+"</span>";
+            return "<span style=\"color: darkorange;\">"+replace+"</span>";
         });
         return result;
     }

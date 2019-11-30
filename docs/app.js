@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
     socket.on("login", async (user) => {
         if(!isValidUser(user)){
             socket.emit("alert","Password or login length cannot " +
-                "be <3 or >30 and contain these symbols &=`~+,<>.\"");
+                "be <3 or >15 and contain these symbols &=`~+,<>.\"");
             return;
         }
         user.username = sanitizeHtml(user.username,{
@@ -109,7 +109,7 @@ io.on('connection', (socket) => {
         }
         socket.emit("change-username",socket.username);
         sendSystemMessage(socket.username +" entered chat");
-        socketEmitInit();
+        // socketEmitInit();
     });
 
     //Get message from single socket, add to SQL, broadcast to others.
@@ -211,8 +211,8 @@ function addMessageSQL(messageObj) {
 }
 
 function isValidUser(user) {
-    if(user.username.length>20 ||user.username.length<3||
-        user.password.length>20 ||user.password.length<3)
+    if(user.username.length>15 ||user.username.length<3||
+        user.password.length>15 ||user.password.length<3)
         return false;
     const forbidden = Array.from("\"&=`~+,<>.\"");
     for (let i = 0; i < forbidden.length; i++) {
