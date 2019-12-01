@@ -80,6 +80,8 @@ io.on('connection', (socket) => {
         sendSystemMessage(socket.username +" left chat");
     });
 
+    var clientIp = socket.request.connection.remoteAddress;
+    console.log("Clent ip: "+clientIp);
     //Login logic
     socket.on("login", async (user) => {
         if(!isValidUser(user)){
