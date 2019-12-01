@@ -4,6 +4,9 @@
     <list default="true" id="76e6c34f-820b-471f-b15b-8122e49fb726" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/public/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/public/styles/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/public/styles/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/js/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/chat.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,6 +19,7 @@
       <list>
         <option value="CSS File" />
         <option value="JavaScript File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -25,6 +29,7 @@
   <component name="ProjectId" id="1UCPxD6dcisO9AFSOmh3JfPHjDD" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
@@ -71,7 +76,7 @@
       <option name="presentableId" value="Default" />
       <updated>1574857848709</updated>
       <workItem from="1574857853481" duration="91128000" />
-      <workItem from="1575134146390" duration="24656000" />
+      <workItem from="1575134146390" duration="28465000" />
     </task>
     <servers />
   </component>

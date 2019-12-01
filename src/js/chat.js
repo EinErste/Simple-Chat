@@ -15,6 +15,10 @@ $(document).ready(function(){
         $(".message-input").val("");
     });
 
+    // $(".ban").click(function(){
+    //     socket.emit("ban");
+    // });
+
     socket.on("alert",(data)=>{
         alert(data);
     });
@@ -45,12 +49,15 @@ $(document).ready(function(){
 
 
 
+
     socket.on("power",data=> {
         power = data;
         if(power){
             $(".message-delete").css("display","block");
+            $(".ban").css("display","none");
         } else {
             $(".message-delete").css("display","none");
+            $(".ban").css("display","none");
         }
     });
 
@@ -79,6 +86,7 @@ $(document).ready(function(){
             "                <div class=\"message-info\">\n" +
             "                    <div class=\"message-info-inwrapper\"><div class=\"author\">"+messageObj.username+"</div>\n" +
             "                    <div class=\"time\">"+messageObj.time+"</div></div>\n" +
+            "                    <button class=\"ban\">&#x1f528;</button>\n" +
             "                    <button class=\"message-delete\">x</button>\n" +
             "                </div>\n" +
             "                <div class=\"text\">"+tagUser(linkify(messageObj.message))+"</div>\n" +

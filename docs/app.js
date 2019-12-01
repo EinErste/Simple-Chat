@@ -24,10 +24,9 @@ app.set('views', path.join(__dirname,"/views"));
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname, './public')));
 app.use(express.static("front"));
-app.get("/",(req,res)=>{res.render("index");});
 server = app.listen(port);
 const io = require("socket.io")(server);
-
+let clientIP;
 //Connect to MySQL
 const mysql_connection = mysql.createConnection({
     host     : 'eu-cdbr-west-02.cleardb.net',
@@ -42,6 +41,12 @@ mysql_connection.connect(function(err) {
     } else {
         console.log("SQL connected!");
     }
+});
+
+app.get("/",(req,res)=>{
+    clientIP = req.ip;
+    console.log('ip: ', clientIP);
+    res.render("index");
 });
 
 //Prevent SQL timeout idle
@@ -69,6 +74,12 @@ mysql_connection.query("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",(err,resul
 
 //Socket io
 io.on('connection', (socket) => {
+    // getIPBanTable().then(data=>{
+    //     if(data!=undefined){
+    //         socket.emit("alert","You are banned. Contact sample@gamil.com");
+    //         socket.disconnect();
+    //     }
+    // });
     //Init new socket with info
     socketEmitInit();
     socket.username = "Anonymous";
@@ -81,8 +92,8 @@ io.on('connection', (socket) => {
         sendSystemMessage(socket.username +" left chat");
     });
 
-    var clientIp = socket.request.connection.remoteAddress;
-    console.log("Clent ip: "+clientIp);
+    // var clientIp = socket.request.connection.remoteAddress;
+    // console.log("Clent ip: "+clientIp);
     //Login logic
     socket.on("login", async (user) => {
         if(!isValidUser(user)){
@@ -146,6 +157,16 @@ io.on('connection', (socket) => {
         io.sockets.emit("delete-message-confirmed", data);
     });
 
+    // socket.on("ban",function () {
+    //     console.log("ban?");
+    //     let sql = "INSERT INTO banlist VALUES(?)";
+    //     let inserts = [clientIP];
+    //     sql = mysql.format(sql, inserts);
+    //     mysql_connection.query(sql);
+    //     socket.emit("alert","You are banned. Contact sample@gamil.com");
+    //     socket.disconnect();
+    // })
+
     //User SYSTEM sends message
     function sendSystemMessage(string) {
         const messageObject = {message : string, username : "SYSTEM", time : getTime(), id: counter++};
@@ -158,13 +179,30 @@ io.on('connection', (socket) => {
             socket.emit("connection",data);
         });
     }
+    
+    function checkBan() {
+        getIPBanTable().then(data=>{
+            if(data!=undefined) return true;
+        });
+    }
 
 });
 
+// function getIPBanTable(){
+//     return new Promise(resolve => {
+//         let sql = "SELECT ip FROM banlist WHERE ip = ?";
+//         let inserts = [clientIP];
+//         sql = mysql.format(sql, inserts);
+//         mysql_connection.query(sql, function(error, result, field){
+//             resolve(result[0]);
+//         });
+//     });
+// }
+
 async function getMessages() {
     return new Promise(resolve => {
-            // let sql = "SELECT * FROM Messages ORDER BY ID ASC";
-            let sql = "SELECT * FROM Messages";
+        // let sql = "SELECT * FROM Messages ORDER BY ID ASC";
+        let sql = "SELECT * FROM Messages";
         mysql_connection.query(sql, function(error, result, field){
             resolve(result);
         });

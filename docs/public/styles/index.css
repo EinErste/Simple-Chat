@@ -124,6 +124,11 @@ header div{
     max-height: 100%;
     display: none;
 }
+
+.ban{
+    max-height: 100%;
+    display: none;
+}
 #input-zone{
     display: flex;
     justify-content: center;
