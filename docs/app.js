@@ -18,7 +18,8 @@ let counter = 0;
 const maxMessages = 700;
 const maxChars = 1500;
 const nickRegex = /[0-9a-zA-Z*]{4,14}/;
-const passRegex = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z*]{3,14}/;
+const passRegex = /[0-9a-zA-Z*]{4,14}/;
+// const passRegex = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z*]{3,14}/;
 app.set('views', path.join(__dirname,"/views"));
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname, './public')));
@@ -128,7 +129,7 @@ io.on('connection', (socket) => {
         let message = sanitizeHtml(data.message,sanitizeSettings);
         if(message.length<1) return;
         if(message.length>maxChars) return;
-        message = replaceZalgoSymbols(message);
+        // message = replaceZalgoSymbols(message);
         const messageObject = {message : message, username : socket.username, time : getTime(), id: counter++};
         provideEnoughSpaceMessagesSQL();
         addMessageSQL(messageObject);
