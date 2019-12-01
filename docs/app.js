@@ -172,11 +172,12 @@ function getTime() {
     var time = [now.getHours(), now.getMinutes(), now.getSeconds(),
         now.getDate(),now.getMonth()+1,now.getFullYear()];
 
-    for(var i = 0; i < 3; i++) {
+    for(var i = 0; i < 5; i++) {
         if(time[i] < 10) {
             time[i] = '0' + time[i];
         }
     }
+
 
     return time[0]+":"+time[1]+":"+time[2]+" "+ time[3]+"."+ time[4]+"."+ time[5];
 }
