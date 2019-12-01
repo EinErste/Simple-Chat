@@ -25,7 +25,7 @@ $(document).ready(function(){
             let audio = new Audio('../media/sounds/notification.mp3');
             audio.play();
         }
-        setInterval(() => {
+        setTimeout(() => {
             $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
         }, 100);
         if(username=="Anonymous") return;
@@ -41,7 +41,7 @@ $(document).ready(function(){
         for (let i = 0; i < data.length; i++) {
             renderMessage(data[i]);
         }
-        setInterval(() => {
+        setTimeout(() => {
             $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
         }, 500);
     });
