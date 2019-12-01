@@ -6,7 +6,7 @@ $(document).ready(function(){
     let power = false;
     let canSend = true;
     $(".message-send").click(function(){
-        if(!canSend) return;
+        if(!canSend && (username!="Admin"&&username!="Moderator")) return;
         canSend = false;
         setTimeout(function() {
             canSend = true;
@@ -21,12 +21,12 @@ $(document).ready(function(){
 
     socket.on("new-message", (data) => {
         renderMessage(data);
-        if(data.message.includes("@everyone")|| (data.message.includes("@"+username)&&!data.message.includes("@Anonymous"))){
+        if(data.message.includes("@everyone")|| (data.message.includes("@"+username))){
             let audio = new Audio('../media/sounds/notification.mp3');
             audio.play();
         }
         $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
-        if(username=="Anonymous");
+        if(username=="Anonymous") return;
         $(".author").filter(function () {
             return $(this).text() == username;
         }).css("color", "darkorange");

@@ -7,9 +7,15 @@ const sanitizeSettings = {
 };
 const port = process.env.PORT || 8000;
 const app = express();
+//Administration nicks
 const power =["SYSTEM","Admin","Moderator"];
+//Current online
 let online = 0;
+//Last message id in table
 let counter = 0;
+//Max storage 5MB, each char 4B, roughly calculated 4*1500*700= 5MB
+const maxMessages = 700;
+const maxChars = 1500;
 app.set('views', path.join(__dirname,"/views"));
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname, './public')));
@@ -46,6 +52,16 @@ setInterval(() => {
 getCounter().then(data=>{
    if(data!=undefined) counter = data.id + 1;
 });
+//Set encoding to normal UTF-8(sql is weird)
+mysql_connection.query("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",(err,result)=>{
+    if(err){
+        mysql_connection.query("SHOW VARIABLES WHERE Variable_name LIKE " +
+            "'character\\_set\\_%' OR Variable_name LIKE 'collation%';",(err,result)=>{
+            console.log(result);
+        });
+        throw err;
+    }
+})
 
 //Socket io
 io.on('connection', (socket) => {
@@ -116,8 +132,9 @@ io.on('connection', (socket) => {
     socket.on("new-message", (data) => {
         const message = sanitizeHtml(data.message,sanitizeSettings);
         if(message.length<1) return;
-        if(message.length>3000) return;
+        if(message.length>maxChars) return;
         const messageObject = {message : message, username : socket.username, time : getTime(), id: counter++};
+        provideEnoughSpaceMessagesSQL();
         addMessageSQL(messageObject);
         io.sockets.emit("new-message", messageObject);
     });
@@ -170,7 +187,7 @@ function getTime() {
     return time[0]+":"+time[1]+":"+time[2]+" "+ time[3]+"."+ time[4]+"."+ time[5];
 }
 
-function getPassword(user){
+async function getPassword(user){
     return new Promise(resolve => {
         let sql = "SELECT pass FROM Users WHERE username = ?";
         let inserts = [user.username];
@@ -201,14 +218,32 @@ async function getCounter() {
     });
 }
 
-
-
 function addMessageSQL(messageObj) {
     let sql = "INSERT INTO Messages VALUES(?,?,?,?)";
     let inserts = [messageObj.id,messageObj.message,messageObj.username,messageObj.time];
     sql = mysql.format(sql, inserts);
     mysql_connection.query(sql);
 }
+
+function removeMessageById(id) {
+    let sql = "DELETE FROM Messages WHERE id = ?;";
+    let inserts = [id];
+    sql = mysql.format(sql, inserts);
+    mysql_connection.query(sql);
+}
+
+function provideEnoughSpaceMessagesSQL() {
+    mysql_connection.query("SELECT COUNT(*) AS total FROM messages",(err,result)=>{
+        console.log("Total messages: "+result[0].total);
+        if(result[0].total>=maxMessages){
+            mysql_connection.query("DELETE FROM messages ORDER BY id ASC limit 10");
+            console.log("deleting first 10 messages in table");
+        }
+    });
+}
+
+
+
 
 function isValidUser(user) {
     if(user.username.length>15 ||user.username.length<3||
@@ -238,11 +273,4 @@ function checkPower(username) {
         }
     }
     return false;
-}
-
-function removeMessageById(id) {
-    let sql = "DELETE FROM Messages WHERE id = ?;";
-    let inserts = [id];
-    sql = mysql.format(sql, inserts);
-    mysql_connection.query(sql);
 }
