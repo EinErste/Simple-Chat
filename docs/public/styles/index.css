@@ -127,6 +127,7 @@ header div{
 
 .message-img{
     max-height: 500px;
+    max-width: 100%;
 }
 #input-zone{
     display: flex;

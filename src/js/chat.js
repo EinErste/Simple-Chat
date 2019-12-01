@@ -25,7 +25,9 @@ $(document).ready(function(){
             let audio = new Audio('../media/sounds/notification.mp3');
             audio.play();
         }
-        $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
+        setInterval(() => {
+            $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
+        }, 100);
         if(username=="Anonymous") return;
         $(".author").filter(function () {
             return $(this).text() == username;
@@ -39,8 +41,9 @@ $(document).ready(function(){
         for (let i = 0; i < data.length; i++) {
             renderMessage(data[i]);
         }
-        $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
-        $("#content-container").scrollTop($("#content-container").get(0).scrollHeight);
+        setInterval(() => {
+            $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
+        }, 500);
     });
 
 
