@@ -40,6 +40,7 @@ $(document).ready(function(){
             renderMessage(data[i]);
         }
         $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
+        $("#content-container").scrollTop($("#content-container").get(0).scrollHeight);
     });
 
 
