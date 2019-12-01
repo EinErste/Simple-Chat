@@ -17,7 +17,8 @@ let counter = 0;
 //Max storage 5MB, each char 4B, roughly calculated 4*1500*700= 5MB
 const maxMessages = 700;
 const maxChars = 1500;
-const passNickRegex = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z*]{3,15}/;
+const nickRegex = /[0-9a-zA-Z*]{4,14}/;
+const passRegex = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z*]{3,14}/;
 app.set('views', path.join(__dirname,"/views"));
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname, './public')));
@@ -83,7 +84,7 @@ io.on('connection', (socket) => {
     socket.on("login", async (user) => {
         if(!isValidUser(user)){
             socket.emit("alert","Password or login length cannot " +
-                "be <4 or >15. Can contain only a-z, A-Z and 0-9");
+                "be <4 or >15. Must contain only a-z, A-Z and 0-9");
             return;
         }
         if(checkLogged(user)){
@@ -243,7 +244,7 @@ function isValidUser(user) {
         user.password.length>15 ||user.password.length<4){
         return false;
     }
-    if(!user.username.match(passNickRegex)||!user.password.match(passNickRegex)){
+    if(!user.username.match(nickRegex)||!user.password.match(passRegex)){
         return false
     }
     return true;
