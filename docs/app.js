@@ -5,6 +5,7 @@ const sanitizeHtml = require('sanitize-html');
 const sanitizeSettings = {
     allowedTags: ["br"],
 };
+
 const port = process.env.PORT || 8000;
 const app = express();
 //Administration nicks
@@ -16,6 +17,7 @@ let counter = 0;
 //Max storage 5MB, each char 4B, roughly calculated 4*1500*700= 5MB
 const maxMessages = 700;
 const maxChars = 1500;
+const passNickRegex = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z*]{3,15}/;
 app.set('views', path.join(__dirname,"/views"));
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname, './public')));
@@ -81,22 +83,13 @@ io.on('connection', (socket) => {
     socket.on("login", async (user) => {
         if(!isValidUser(user)){
             socket.emit("alert","Password or login length cannot " +
-                "be <3 or >15 and contain these symbols &=`~+,<>.\"");
+                "be <4 or >15. Can contain only a-z, A-Z and 0-9");
             return;
         }
-        user.username = sanitizeHtml(user.username,{
-            allowedTags: [],
-            allowedAttributes: {}
-        });
-        user.password = sanitizeHtml(user.password,{
-            allowedTags: [],
-            allowedAttributes: {}
-        });
         if(checkLogged(user)){
             socket.emit("alert","User already logged");
             return;
         }
-
         const passwordSQL = await getPassword(user);
         //User is registered
         if(passwordSQL!=undefined){
@@ -125,14 +118,14 @@ io.on('connection', (socket) => {
         }
         socket.emit("change-username",socket.username);
         sendSystemMessage(socket.username +" entered chat");
-        // socketEmitInit();
     });
 
     //Get message from single socket, add to SQL, broadcast to others.
     socket.on("new-message", (data) => {
-        const message = sanitizeHtml(data.message,sanitizeSettings);
+        let message = sanitizeHtml(data.message,sanitizeSettings);
         if(message.length<1) return;
         if(message.length>maxChars) return;
+        message = replaceZalgoSymbols(message);
         const messageObject = {message : message, username : socket.username, time : getTime(), id: counter++};
         provideEnoughSpaceMessagesSQL();
         addMessageSQL(messageObject);
@@ -246,16 +239,20 @@ function provideEnoughSpaceMessagesSQL() {
 
 
 function isValidUser(user) {
-    if(user.username.length>15 ||user.username.length<3||
-        user.password.length>15 ||user.password.length<3)
+    if(user.username.length>15 ||user.username.length<4||
+        user.password.length>15 ||user.password.length<4){
         return false;
-    const forbidden = Array.from("\"&=`~+,<>.\"");
-    for (let i = 0; i < forbidden.length; i++) {
-        if(user.username.includes(forbidden[i])||user.username.includes(forbidden[i]))
-            return false;
+    }
+    if(!user.username.match(passNickRegex)||!user.password.match(passNickRegex)){
+        return false
     }
     return true;
 }
+
+function replaceZalgoSymbols(text) {
+    return text.replace(/[^\u+0300-\u+036F]/g,"");
+}
+
 function checkLogged(user) {
     const sockets = io.sockets.sockets;
     for(var socketId in sockets) {
