@@ -80,9 +80,6 @@ io.on('connection', (socket) => {
         if(socket.username == "Anonymous") return;
         sendSystemMessage(socket.username +" left chat");
     });
-
-    var clientIp = socket.request.connection.remoteAddress;
-    console.log("Clent ip: "+clientIp);
     //Login logic
     socket.on("login", async (user) => {
         if(!isValidUser(user)){

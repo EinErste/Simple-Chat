@@ -124,6 +124,11 @@ header div{
     max-height: 100%;
     display: none;
 }
+
+.message-img{
+    width: 100%;
+    height: auto;
+}
 #input-zone{
     display: flex;
     justify-content: center;

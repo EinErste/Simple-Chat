@@ -81,7 +81,7 @@ $(document).ready(function(){
             "                    <div class=\"time\">"+messageObj.time+"</div></div>\n" +
             "                    <button class=\"message-delete\">x</button>\n" +
             "                </div>\n" +
-            "                <div class=\"text\">"+tagUser(linkify(messageObj.message))+"</div>\n" +
+            "                <div class=\"text\">"+tagUser(imagefy(messageObj.message))+"</div>\n" +
             "            </div>");
 
         if(messageObj.username=="SYSTEM"){
@@ -121,6 +121,13 @@ $(document).ready(function(){
     function linkify(text) {
         return text.replace(urlRegex, function(url) {
             return '<a target="_blank" href="' + url + '">' + url + '</a>';
+        });
+    }
+
+    function imagefy(text) {
+        return text.replace(/image\((.*)\)/, function(img) {
+            const str = img.match(/image\((.*)\)/)[1];
+            return '<img class="message-img" src="' + str + '">';
         });
     }
 
