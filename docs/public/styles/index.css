@@ -62,12 +62,14 @@ header div{
 }
 
 #title-info{
+    text-align: center;
     font-size: 25px;
     display: flex;
     flex-direction: column;
 }
 
 .online-users{
+    display: none;
     color: green;
 }
 #login-form{
@@ -168,23 +170,24 @@ header div{
 
 
 @media only screen and (max-width: 1076px){
-    #title-info{
-        text-align: center;
-    }
+
     .hide-login{
-        display: block;
         font-size: 30px;
     }
     #content-container{
         width: 90vw;
-        min-height: 90vh;
     }
 }
 @media only screen and (max-width: 900px){
+    .hide-login{
+        width: 50%;
+    }
     #content-container{
-        height: initial;
-        min-height: 90vh;
         flex-direction: column;
+    }
+
+    #chatroom-container{
+        height: 100vh;
     }
 
     header{

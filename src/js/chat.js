@@ -55,9 +55,12 @@ $(document).ready(function(){
         for (let i = 0; i < data.length; i++) {
             renderMessage(data[i]);
         }
+        if($(window).width()<1000){
+            $(".hide-login").click();
+        }
         setTimeout(() => {
-            $("#chatroom").scrollTop($("#chatroom").get(0).scrollHeight);
-        }, 500);
+            $("#chatroom").animate({ scrollTop: $("#chatroom").get(0).scrollHeight }, 1000);
+        }, 300);
     });
 
 
@@ -84,7 +87,7 @@ $(document).ready(function(){
         $(".author").filter(function () {
             return $(this).text() == username;
         }).css("color", "darkorange");;
-        $("#user").html("Username:<br><span style=\"color: darkorange;\">"+name+"</span>");
+        $("#user").html("Account<br><span style=\"color: darkorange;\">"+name+"</span>");
     });
 
     socket.on("delete-message-confirmed", (id)=>{
@@ -97,7 +100,7 @@ $(document).ready(function(){
             "                    <div class=\"time\">"+messageObj.time+"</div></div>\n" +
             "                    <button class=\"message-delete\">x</button>\n" +
             "                </div>\n" +
-            "                <div class=\"text\">"+tagUser(imagefy(messageObj.message))+"</div>\n" +
+            "                <div class=\"text\">"+tagUser(linkify(imagefy(messageObj.message)))+"</div>\n" +
             "            </div>");
 
         if(messageObj.username=="SYSTEM"){
@@ -135,15 +138,16 @@ $(document).ready(function(){
     }
 
     function linkify(text) {
-        return text.replace(urlRegex, function(url) {
-            return '<a target="_blank" href="' + url + '">' + url + '</a>';
+        return text.replace(/url\((.*)\)/, function(url) {
+            const str = url.match(/url\((.*)\)/)[1];
+            return '<a target="_blank" href="' + str + '">' + str + '</a>';
         });
     }
 
     function imagefy(text) {
         return text.replace(/image\((.*)\)/, function(img) {
             const str = img.match(/image\((.*)\)/)[1];
-            return '<img class="message-img" src="' + str + '">';
+            return '<br><img class="message-img" src="' + str + '"><br>';
         });
     }
 
