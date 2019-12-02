@@ -2,6 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="76e6c34f-820b-471f-b15b-8122e49fb726" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/public/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/public/styles/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/public/styles/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/docs/views/index.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/js/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/js/chat.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -13,8 +18,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="CSS File" />
         <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -26,6 +31,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/docs/views" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -36,6 +42,9 @@
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\University\GitProjects\Simple Chat\docs\views" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\University\GitProjects\Simple Chat\docs\public\media\sounds" />
       <recent name="D:\University\GitProjects\Simple Chat\docs\views" />
@@ -74,7 +83,7 @@
       <workItem from="1575228278033" duration="112000" />
       <workItem from="1575231771435" duration="1214000" />
       <workItem from="1575233019409" duration="21000" />
-      <workItem from="1575233091330" duration="6911000" />
+      <workItem from="1575233091330" duration="14117000" />
     </task>
     <servers />
   </component>

@@ -1,0 +1,45 @@
+body{
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    font-family: "Open Sans";
+}
+#content-container{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightblue;
+}
+
+.text{
+    padding: 10px;
+    min-width: 50%;
+    min-height: 50%;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    background-color: rgba(255,255,255,0.8);
+}
+
+footer {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: lightslategrey;
+    margin-bottom: 0px;
+    font-size: 15px;
+    color: black;
+}
+
+@media only screen and (max-width: 600px) {
+
+    footer{
+        flex-direction: column;
+    }
+}

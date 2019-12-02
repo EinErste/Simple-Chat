@@ -25,6 +25,7 @@ app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname, './public')));
 app.use(express.static("front"));
 app.get("/",(req,res)=>{res.render("index");});
+app.get("/faq",(req,res)=>{res.render("faq");});
 server = app.listen(port);
 const io = require("socket.io")(server);
 

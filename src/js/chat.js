@@ -64,7 +64,7 @@ $(document).ready(function(){
             $(".hide-login").click();
         }
         setTimeout(() => {
-            $("#chatroom").animate({ scrollTop: $("#chatroom").get(0).scrollHeight }, 1250);
+            $("#chatroom").animate({ scrollTop: $("#chatroom").get(0).scrollHeight }, 500);
         }, 500);
     });
 

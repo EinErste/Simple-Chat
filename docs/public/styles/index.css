@@ -1,3 +1,10 @@
+a{
+    text-decoration: none;
+    color: black;
+}
+a:hover{
+    text-decoration: underline;
+}
 body{
     margin: 0px;
     display: flex;
@@ -35,6 +42,9 @@ button:active {
     top:1px;
 }
 
+.faq{
+    align-self: center;
+}
 
 #content-container{
     align-self: center;
@@ -83,8 +93,9 @@ header div{
     margin-top: 20px;
 }
 .hide-login{
+    font-size: 20px;
     margin-top: 10px;
-    align-self: center;
+    align-self: flex-start;
 }
 #chatroom{
     border-top: 1px solid black;
@@ -175,11 +186,12 @@ header div{
         font-size: 30px;
     }
     #content-container{
-        width: 98vw;
+        width: 97vw;
     }
 }
 @media only screen and (max-width: 900px){
     .hide-login{
+        align-self: center;
         width: 50%;
     }
     #content-container{
