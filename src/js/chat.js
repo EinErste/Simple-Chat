@@ -6,6 +6,11 @@ $(document).ready(function(){
     let power = false;
     let canSend = true;
     let hideInfo = true;
+    //Forbid to hide bar on mobile
+    $("html, body, #wrapper").css({
+        height: $(window).height()
+    });
+
     $(".message-send").click(function(){
         if(!canSend && (username!="Admin"&&username!="Moderator")) return;
         canSend = false;
