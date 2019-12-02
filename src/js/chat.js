@@ -5,6 +5,7 @@ $(document).ready(function(){
     var socket = io();
     let power = false;
     let canSend = true;
+    let hideInfo = true;
     $(".message-send").click(function(){
         if(!canSend && (username!="Admin"&&username!="Moderator")) return;
         canSend = false;
@@ -15,6 +16,19 @@ $(document).ready(function(){
         $(".message-input").val("");
     });
 
+    $(".hide-login").click(function () {
+        if(hideInfo){
+            $(".title").css("display","none");
+            $("#login-form").css("display","none");
+            $("#title-info").css("display","none");
+            hideInfo =false;
+        } else {
+            $(".title").css("display","block");
+            $("#login-form").css("display","flex");
+            $("#title-info").css("display","flex");
+            hideInfo = true;
+        }
+    });
     socket.on("alert",(data)=>{
         alert(data);
     });
@@ -70,8 +84,7 @@ $(document).ready(function(){
         $(".author").filter(function () {
             return $(this).text() == username;
         }).css("color", "darkorange");;
-        $("#user").css("color","darkorange");
-        $("#user").text(""+name+"");
+        $("#user").html("Username:<br><span style=\"color: darkorange;\">"+name+"</span>");
     });
 
     socket.on("delete-message-confirmed", (id)=>{

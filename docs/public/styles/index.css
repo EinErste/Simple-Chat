@@ -80,7 +80,10 @@ header div{
     height: 25px;
     margin-top: 20px;
 }
-
+.hide-login{
+    margin-top: 10px;
+    align-self: center;
+}
 #chatroom{
     border-top: 1px solid black;
     border-bottom: 1px solid black;
@@ -165,6 +168,13 @@ header div{
 
 
 @media only screen and (max-width: 1076px){
+    #title-info{
+        text-align: center;
+    }
+    .hide-login{
+        display: block;
+        font-size: 30px;
+    }
     #content-container{
         width: 90vw;
         min-height: 90vh;
