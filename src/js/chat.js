@@ -55,12 +55,12 @@ $(document).ready(function(){
         for (let i = 0; i < data.length; i++) {
             renderMessage(data[i]);
         }
-        if($(window).width()<1000){
+        if($(window).width()<901){
             $(".hide-login").click();
         }
         setTimeout(() => {
-            $("#chatroom").animate({ scrollTop: $("#chatroom").get(0).scrollHeight }, 1000);
-        }, 300);
+            $("#chatroom").animate({ scrollTop: $("#chatroom").get(0).scrollHeight }, 1250);
+        }, 500);
     });
 
 
