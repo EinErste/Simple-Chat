@@ -7,7 +7,7 @@ $(document).ready(function(){
     let canSend = true;
     let hideInfo = true;
     //Forbid to hide bar on mobile
-    $("html, body, #wrapper").css({
+    $("html, body, #content-container").css({
         height: $(window).height()
     });
 
