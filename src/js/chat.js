@@ -6,6 +6,9 @@ $(document).ready(function(){
     let power = false;
     let canSend = true;
     let hideInfo = true;
+    let idle = false;
+    //Idle time 5 mins
+    const idleTime = 5 * 60000;
     //Forbid to hide bar on mobile
     $("html, body, #content-container").css({
         height: $(window).height()
@@ -19,6 +22,20 @@ $(document).ready(function(){
         }, 1500);
         socket.emit("new-message", {message : insert_br($(".message-input").val())})
         $(".message-input").val("");
+    });
+
+    //Idle connection handling
+    $(window).blur(function(){
+        idle = true;
+        setTimeout(() => {
+            if(idle) socket.emit("idle");
+        }, idleTime);
+    });
+    $(window).focus(function(){
+        if(!socket.connected){
+            location.reload();
+        }
+        idle = false;
     });
 
     $(".hide-login").click(function () {
@@ -70,6 +87,10 @@ $(document).ready(function(){
         }, 500);
     });
 
+    //Dunno if working
+    socket.on("connect_error", function(e) {
+        socket.io.reconnection(false);
+    });
 
 
     socket.on("power",data=> {

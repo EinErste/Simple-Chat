@@ -43,6 +43,7 @@ button:active {
 .faq{
     text-decoration: none;
     align-self: center;
+    margin-bottom: 15px;
 }
 .faq:hover{
     text-decoration: underline;
@@ -80,7 +81,6 @@ header div{
 }
 
 .online-users{
-    display: none;
     color: green;
 }
 #login-form{

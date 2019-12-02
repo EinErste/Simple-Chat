@@ -76,10 +76,16 @@ io.on('connection', (socket) => {
     //Update all socket counters
     io.sockets.emit("online-counter",++online);
     //Update all socket counters and send leave message
+    socket.on("idle",function () {
+        if(socket.username != "Anonymous"){
+            sendColdSystemMessage(socket.username +" left chat");
+        }
+        socket.disconnect();
+    })
     socket.on("disconnect", function() {
         io.sockets.emit("online-counter",--online);
-        if(socket.username == "Anonymous") return;
-        sendSystemMessage(socket.username +" left chat");
+        if(socket.username != "Anonymous")
+            sendSystemMessage(socket.username +" left chat");
     });
     //Login logic
     socket.on("login", async (user) => {
@@ -149,6 +155,11 @@ io.on('connection', (socket) => {
         const messageObject = {message : string, username : "SYSTEM", time : getTime(), id: counter++};
         addMessageSQL(messageObject);
         io.sockets.emit("new-message", messageObject);
+    }
+
+    function sendColdSystemMessage(string) {
+        const messageObject = {message : string, username : "SYSTEM", time : getTime(), id: counter++};
+        socket.emit("new-message", messageObject);
     }
 
     function socketEmitInit() {
