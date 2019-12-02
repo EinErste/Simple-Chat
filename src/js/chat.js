@@ -26,11 +26,13 @@ $(document).ready(function(){
             $(".title").css("display","none");
             $("#login-form").css("display","none");
             $("#title-info").css("display","none");
+            $(".faq").css("display","none");
             hideInfo =false;
         } else {
             $(".title").css("display","block");
             $("#login-form").css("display","flex");
             $("#title-info").css("display","flex");
+            $(".faq").css("display","initial");
             hideInfo = true;
         }
     });
