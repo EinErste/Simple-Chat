@@ -2,9 +2,6 @@ a{
     text-decoration: underline;
     color: black;
 }
-a:hover{
-    text-decoration: underline;
-}
 body{
     margin: 0px;
     display: flex;
@@ -47,7 +44,9 @@ button:active {
     text-decoration: none;
     align-self: center;
 }
-
+.faq:hover{
+    text-decoration: underline;
+}
 #content-container{
     align-self: center;
     display: flex;
