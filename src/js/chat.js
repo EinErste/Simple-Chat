@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    const urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    //const urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     let username = "Anonymous";
     $("#chatroom").scrollTop($("#chatroom")[0].scrollHeight);
     var socket = io();
@@ -128,7 +128,7 @@ $(document).ready(function(){
             "                    <div class=\"time\">"+messageObj.time+"</div></div>\n" +
             "                    <button class=\"message-delete\">x</button>\n" +
             "                </div>\n" +
-            "                <div class=\"text\">"+tagUser(linkify(imagefy(messageObj.message)))+"</div>\n" +
+            "                <div class=\"text\">"+tagUser(youtube(linkify(imagefy(messageObj.message))))+"</div>\n" +
             "            </div>");
 
         if(messageObj.username=="SYSTEM"){
@@ -177,6 +177,24 @@ $(document).ready(function(){
             const str = img.match(/image\((.*)\)/)[1];
             return '<br><img class="message-img" src="' + str + '"><br>';
         });
+    }
+    
+    function youtube(text) {
+        return text.replace(/youtube\((.*)\)/, function(video) {
+            const str = video.match(/youtube\((.*)\)/)[1];
+            const vidID=getId(str);
+            return '<div class="iframe-container"><iframe frameborder="0" allowfullscreen src="https://www.youtube.com/embed/'
+                + vidID + '"></iframe></div>';
+        });
+    }
+
+    function getId(url) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+
+        return (match && match[2].length === 11)
+            ? match[2]
+            : null;
     }
 
     function tagUser(text){
