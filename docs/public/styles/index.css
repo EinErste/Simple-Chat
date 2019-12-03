@@ -136,8 +136,6 @@ header div{
 
 .message .text{
     word-break: break-word;
-    /*display: flex;*/
-    /*flex-direction: column;*/
 }
 
 .iframe-container {
@@ -172,11 +170,14 @@ header div{
     max-height: 100%;
     display: none;
 }
+.message-img-wrapper{
 
+}
 .message-img{
     max-height: 500px;
     max-width: 100%;
 }
+
 #input-zone{
     display: flex;
     justify-content: center;

@@ -6,9 +6,9 @@ $(document).ready(function(){
     let power = false;
     let canSend = true;
     let hideInfo = true;
-    let idle = false;
-    //Idle time 5 mins
-    const idleTime = 5 * 60000;
+    //Idle time 60 mins
+    const idleTime = 60 * 60000;
+    let idleTimeout;
     //Forbid to hide bar on mobile
     $("html, body, #content-container").css({
         height: $(window).height()
@@ -26,16 +26,13 @@ $(document).ready(function(){
 
     //Idle connection handling
     $(window).blur(function(){
-        idle = true;
-        setTimeout(() => {
-            if(idle) socket.emit("idle");
-        }, idleTime);
+        idleTimeout =  window.setTimeout(() => {socket.emit("idle");}, idleTime);
     });
     $(window).focus(function(){
         if(!socket.connected){
             location.reload();
         }
-        idle = false;
+        clearTimeout(idleTimeout);
     });
 
     $(".hide-login").click(function () {
@@ -128,7 +125,7 @@ $(document).ready(function(){
             "                    <div class=\"time\">"+messageObj.time+"</div></div>\n" +
             "                    <button class=\"message-delete\">x</button>\n" +
             "                </div>\n" +
-            "                <div class=\"text\">"+tagUser(youtube(linkify(imagefy(messageObj.message))))+"</div>\n" +
+            "                <div class=\"text\">"+tagUser(linkify(imagefy(messageObj.message)))+"</div>\n" +
             "            </div>");
 
         if(messageObj.username=="SYSTEM"){
@@ -139,7 +136,6 @@ $(document).ready(function(){
                 $("#m"+messageObj.id).css("background-color","lightyellow");
             }
         }
-
 
         if(power){
             $(".message-delete").css("display","block");
