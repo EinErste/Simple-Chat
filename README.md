@@ -6,7 +6,7 @@ Hello! Here you can find some faq, tips and rules.
 
 FAQ
 Q:How do i sign up?
-A:Fill login form, if there wasn`t such user, you`ve signed up and logged.
+A:Fill login form, if there wasnt such user, youve signed up and logged.
 
 Q:How do i login?
 A:Fill login form, if there was such user, you`ve logged.
