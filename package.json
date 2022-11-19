@@ -26,6 +26,6 @@
     "nodemon-webpack-plugin": "^4.2.1",
     "webpac": "^1.0.1",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.12"
   }
 }
